@@ -27,6 +27,7 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
+	rm -fr .tox/
 
 
 clean-build: ## remove build artifacts
@@ -43,32 +44,18 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '__pycache__' -exec rm -fr {} +
 
 clean-test: ## remove test and coverage artifacts
-	rm -fr .tox/
 	rm -f .coverage
+	rm -f coverage.xml
 	rm -fr htmlcov/
 
 lint: ## check style with flake8
 	flake8 {{ cookiecutter.project_slug }} tests
 
 test: ## run tests quickly with the default Python
-	{% if cookiecutter.use_pytest == 'y' -%}
-		py.test
-	{% else %}
-		python setup.py test
-	{%- endif %}
+	python -m unittest discover tests
 
-test-all: ## run tests on every Python version with tox
-	tox
-
-coverage: ## check code coverage quickly with the default Python
-	{% if cookiecutter.use_pytest == 'y' -%}
-		coverage run --source {{ cookiecutter.project_slug }} -m pytest
-	{% else %}
-		coverage run --source {{ cookiecutter.project_slug }} setup.py test
-	{% endif %}
-		coverage report -m
-		coverage html
-		$(BROWSER) htmlcov/index.html
+test-all: clean-build clean-pyc clean-test ## run tests on every Python version with tox
+	tox --skip-missing-interpreters
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/{{ cookiecutter.project_slug }}.rst
@@ -81,9 +68,8 @@ docs: ## generate Sphinx HTML documentation, including API docs
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: clean ## package and upload a release
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+release: test-all ## package and upload a release
+	twine upload dist/*
 
 dist: clean ## builds source and wheel package
 	python setup.py sdist

@@ -6,6 +6,7 @@ env:
   - TOXENV=py33
   - TOXENV=py34
   - TOXENV=py35
+  - TOXENV=py36
 
 install:
   - pip install -U tox
@@ -21,5 +22,5 @@ deploy:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: audreyr/python_boilerplate
+    repo: kidosoft/python_boilerplate
     condition: $TOXENV == py27

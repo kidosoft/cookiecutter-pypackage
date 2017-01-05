@@ -153,7 +153,7 @@ def test_bake_without_author_file(cookies):
 def test_make_help(cookies):
     with bake_in_temp_dir(cookies) as result:
         output = check_output_inside_dir('make help', str(result.project))
-        assert b"check code coverage quickly with the default Python" in output
+        assert b"run tests on every Python version with tox" in output
 
 
 def test_bake_selecting_license(cookies):
@@ -176,14 +176,6 @@ def test_bake_not_open_source(cookies):
         assert 'setup.py' in found_toplevel_files
         assert 'LICENSE' not in found_toplevel_files
         assert 'License' not in result.project.join('README.rst').read()
-
-
-def test_using_pytest(cookies):
-    with bake_in_temp_dir(cookies, extra_context={'use_pytest': 'y'}) as result:
-        assert result.project.isdir()
-        test_file_path = result.project.join('tests/test_python_boilerplate.py')
-        lines = test_file_path.readlines()
-        assert "import pytest" in ''.join(lines)
 
 
 def test_not_using_pytest(cookies):
