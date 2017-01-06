@@ -8,7 +8,6 @@ test_{{ cookiecutter.project_slug }}
 Tests for `{{ cookiecutter.project_slug }}` module.
 """
 
-import sys
 import unittest
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
 from contextlib import contextmanager
@@ -31,7 +30,7 @@ class Test{{ cookiecutter.project_slug|title }}(unittest.TestCase):
 
     def test_should_do_something(self):
         pass
-{% if cookiecutter.command_line_interface|lower == 'click' %}
+{%- if cookiecutter.command_line_interface|lower == 'click' %}
     def test_command_line_interface(self):
         runner = CliRunner()
         result = runner.invoke(cli.main)
@@ -40,5 +39,4 @@ class Test{{ cookiecutter.project_slug|title }}(unittest.TestCase):
         help_result = runner.invoke(cli.main, ['--help'])
         assert help_result.exit_code == 0
         assert '--help  Show this message and exit.' in help_result.output
-
 {%- endif %}

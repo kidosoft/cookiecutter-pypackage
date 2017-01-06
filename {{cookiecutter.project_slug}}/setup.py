@@ -56,7 +56,7 @@ setup(
         '{{ license_classifiers[cookiecutter.open_source_license] }}',
 {%- endif %}
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
@@ -65,6 +65,16 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     extras_require={
+        'devel': [
+            'bumpversion',
+            'coverage',
+            'flake8',
+            'sphinx',
+            'tox',
+            {% if cookiecutter.use_pypi_deployment_with_travis == 'y' -%}
+            'cryptography',
+            'pyyaml',{% endif %}
+        ],
         # eg:
         #   'rst': ['docutils>=0.11'],
         #   ':python_version=="2.6"': ['argparse'],
