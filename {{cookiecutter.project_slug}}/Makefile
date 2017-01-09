@@ -26,6 +26,10 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
+devel:
+	pip install -e .
+	pip install -r requirements_dev.txt
+
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 	rm -fr .tox/
 
@@ -52,17 +56,17 @@ lint: ## check style with flake8
 
 test: ## run tests quickly with the default Python
 	python -m coverage run --branch -m unittest discover tests
-	python -m coverage report -m
+	python -m coverage report -m --skip-covered
 
-coverage:  ## run coverage after tests
+test-tox:
+	tox --skip-missing-interpreters
 	python -m coverage combine tests
-	python -m coverage report
+	python -m coverage report -m
 	python -m coverage xml
 
-tox:
-	tox --skip-missing-interpreters
+tox-ci: dist test-tox coverage lint docs ## run tests on every Python version with tox
 
-test-all: dist tox coverage lint ## run tests on every Python version with tox
+travis-ci: dist test lint docs ## run tests on every Python version with travis
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/{{ cookiecutter.project_slug }}.rst
@@ -72,7 +76,7 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
-release: test-all ## package and upload a release
+release: ## package and upload a release
 	twine upload dist/*
 
 dist: clean-build clean-pyc clean-test ## builds source and wheel package

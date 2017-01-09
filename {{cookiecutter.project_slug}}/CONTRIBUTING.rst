@@ -68,7 +68,7 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_slug }}` for 
 
     $ mkvirtualenv {{ cookiecutter.project_slug }}
     ({{ cookiecutter.project_slug }}) $ cd {{ cookiecutter.project_slug }}/
-    ({{ cookiecutter.project_slug }}) $ pip install -e '.[devel]'
+    ({{ cookiecutter.project_slug }}) $ make devel
 
 4. Create a branch for local development::
 

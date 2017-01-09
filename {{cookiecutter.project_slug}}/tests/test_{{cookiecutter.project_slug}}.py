@@ -9,8 +9,8 @@ Tests for `{{ cookiecutter.project_slug }}` module.
 """
 
 import unittest
+
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
-from contextlib import contextmanager
 from click.testing import CliRunner
 {%- endif %}
 
@@ -31,6 +31,7 @@ class Test{{ cookiecutter.project_slug|title }}(unittest.TestCase):
     def test_should_do_something(self):
         pass
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
+
     def test_command_line_interface(self):
         runner = CliRunner()
         result = runner.invoke(cli.main)
