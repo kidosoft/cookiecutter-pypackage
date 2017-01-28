@@ -1,16 +1,5 @@
 .PHONY: clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
-define BROWSER_PYSCRIPT
-import os, webbrowser, sys
-try:
-	from urllib import pathname2url
-except:
-	from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
-endef
-export BROWSER_PYSCRIPT
-
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
@@ -21,13 +10,14 @@ for line in sys.stdin:
 		print("%-20s %s" % (target, help))
 endef
 export PRINT_HELP_PYSCRIPT
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-devel:
+devel: devreq ## prepare development environment
 	pip install -e .
+
+devreq:
 	pip install -r requirements_dev.txt
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
@@ -51,31 +41,6 @@ clean-test: ## remove test and coverage artifacts
 	rm -f coverage.xml
 	rm -fr htmlcov/
 
-lint: ## check style with flake8
-	flake8 {{ cookiecutter.project_slug }} tests
-
-test: ## run tests quickly with the default Python
-	python -m coverage run --branch -m unittest discover tests
-	python -m coverage report -m --skip-covered
-
-test-tox:
-	tox --skip-missing-interpreters
-	python -m coverage combine tests
-	python -m coverage report -m
-	python -m coverage xml
-
-tox-ci: dist test-tox coverage lint docs ## run tests on every Python version with tox
-
-travis-ci: dist test lint docs ## run tests on every Python version with travis
-
-docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/{{ cookiecutter.project_slug }}.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ {{ cookiecutter.project_slug }}
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
-
 release: ## package and upload a release
 	twine upload dist/*
 
@@ -83,5 +48,27 @@ dist: clean-build clean-pyc clean-test ## builds source and wheel package
 	python setup.py sdist bdist_wheel
 	ls -l dist
 
-install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+install: ## install the package to the active Python's site-packages
+	pip install -U dist/*.whl
+
+test: ## run tests quickly with the default Python
+	cd tests && python -m coverage run -p --source={{ cookiecutter.project_slug }} --branch -m unittest discover .
+
+coverage:  ## prepare coverage report
+	python -m coverage combine tests
+	python -m coverage report -m --skip-covered
+	python -m coverage xml
+
+lint: ## run static analysis with flake8
+	flake8 {{ cookiecutter.project_slug }} tests
+
+docs: ## generate Sphinx HTML documentation
+	$(MAKE) -C docs clean
+	$(MAKE) -C docs html
+
+ci: dist devreq install test coverage lint docs ## run CI pipeline
+
+tox:
+	tox --skip-missing-interpreters
+
+tox-ci: dist tox coverage lint docs ## run CI with tox testing every python version

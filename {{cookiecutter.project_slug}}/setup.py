@@ -6,9 +6,6 @@ from setuptools import setup, find_packages
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
 requirements = [
     {%- if cookiecutter.command_line_interface|lower == 'click' %}
     'Click>=6.0',
@@ -28,8 +25,8 @@ setup(
     name='{{ cookiecutter.project_slug }}',
     version='{{ cookiecutter.version }}',
     description="{{ cookiecutter.project_short_description }}",
-    long_description=readme + '\n\n' + history,
-    author="{{ cookiecutter.full_name.replace('\"', '\\\"') }}",
+    long_description=readme,
+    author='{{ cookiecutter.full_name.replace('\"', '\\\"') }}',
     author_email='{{ cookiecutter.email }}',
     url='https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}',
     packages=find_packages(exclude=['tests']),
@@ -56,9 +53,12 @@ setup(
         '{{ license_classifiers[cookiecutter.open_source_license] }}',
 {%- endif %}
         'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
@@ -66,6 +66,6 @@ setup(
     extras_require={
         # eg:
         #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
+        #   ':python_version=="2.7"': ['mock'],
     },
 )

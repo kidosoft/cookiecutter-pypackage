@@ -1,30 +1,41 @@
 {% set is_open_source = cookiecutter.open_source_license != 'Not open source' -%}
-===============================
+###############################
 {{ cookiecutter.project_name }}
-===============================
+###############################
 
 {% if is_open_source %}
+.. image:: https://img.shields.io/pypi/wheel/{{ cookiecutter.project_slug }}.svg
+    :target: https://pypi.python.org/pypi/{{ cookiecutter.project_slug }}
+    :alt: Wheel Status
+
+.. image:: https://img.shields.io/pypi/pyversions/{{ cookiecutter.project_slug }}.svg
+    :target: https://pypi.python.org/pypi/{{ cookiecutter.project_slug }}
+    :alt: Python Versions
+
 .. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_slug }}.svg
     :target: https://pypi.python.org/pypi/{{ cookiecutter.project_slug }}
-    :alt: PyPI
+    :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/l/{{ cookiecutter.project_slug }}.svg
+    :target: https://pypi.python.org/pypi/{{ cookiecutter.project_slug }}
+    :alt: License
 
 .. image:: https://img.shields.io/travis/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}.svg
     :target: https://travis-ci.org/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
-    :alt: Build
+    :alt: Build status
 
-.. image:: https://coveralls.io/repos/github/{{ cookiecutter.github_username }/{{ cookiecutter.project_slug }}/badge.svg?branch=master
-    :target: https://coveralls.io/github/dryobates/proj1?branch=master
+.. image:: https://coveralls.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/badge.svg
+    :target: https://coveralls.io/r/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
     :alt: Coverage
 
-.. image:: https://readthedocs.org/projects/{{ cookiecutter.project_slug | replace("_", "-") }}/badge/?version=latest
-    :target: https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
+.. image:: https://readthedocs.org/projects/{{ cookiecutter.project_slug | replace("_", "-") }}/badge/?format=svg
+    :target: https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io
+    :alt: Documentation
 {%- endif %}
 
 .. image:: https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/shield.svg
     :target: https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/
     :alt: Updates
-
 
 {{ cookiecutter.project_short_description }}
 
@@ -41,8 +52,7 @@ Features
 Credits
 ---------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+This package was created with Cookiecutter_ and the `kidosoft/cookiecutter-pypackage`_ project template.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-
+.. _`kidosoft/cookiecutter-pypackage`: https://github.com/kidosoft/cookiecutter-pypackage

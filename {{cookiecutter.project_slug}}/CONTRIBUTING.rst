@@ -80,7 +80,7 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_slug }}` for 
 
     ({{ cookiecutter.project_slug }}) $ make lint
     ({{ cookiecutter.project_slug }}) $ make test
-    ({{ cookiecutter.project_slug }}) $ make test-all
+    ({{ cookiecutter.project_slug }}) $ make tox-ci
 
 6. Commit your changes and push your branch to GitHub::
 
